@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- UserSecretsId: Tämä ID yhdistää projektin User Secrets -salaisuuksiin.
+         Lisätty valmiiksi — käytät tätä Vaiheessa 2. -->
+    <UserSecretsId>gallery-api-dev-secrets</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GalleryApi.Domain\GalleryApi.Domain.csproj" />
+    <ProjectReference Include="..\GalleryApi.Application\GalleryApi.Application.csproj" />
+    <ProjectReference Include="..\GalleryApi.Infrastructure\GalleryApi.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
