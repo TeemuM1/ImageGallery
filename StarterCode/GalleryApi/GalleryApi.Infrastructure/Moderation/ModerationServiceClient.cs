@@ -9,7 +9,7 @@ namespace GalleryApi.Infrastructure.Moderation;
 /// </summary>
 public class ModerationServiceClient
 {
-    private readonly string _apiKey;
+    private readonly ModerationServiceOptions _options;
 
     // TODO (Vaihe 4): Muuta konstruktori ottamaan IOptions<ModerationServiceOptions> parametrina
     //   sijaan string apiKey.
@@ -24,9 +24,9 @@ public class ModerationServiceClient
     //   }
     //
     // Muista muuttaa myös _apiKey-kentän tyyppi (tai poista se ja käytä _options.ApiKey suoraan).
-    public ModerationServiceClient(string apiKey)
+    public ModerationServiceClient(IOptions<ModerationServiceOptions> options)
     {
-        _apiKey = apiKey;
+        _options = options.Value;
     }
 
     /// <summary>
@@ -35,8 +35,7 @@ public class ModerationServiceClient
     /// </summary>
     public Task<bool> IsContentSafeAsync(Stream imageStream, string contentType)
     {
-        // Simuloitu tarkistus: oikeassa toteutuksessa lähettäisi kuvan
-        // moderointipalvelun API:lle _apiKey:tä käyttäen
+        // Simuloitu tarkistus — käyttäisi _options.ApiKey:ta oikeassa toteutuksessa
         return Task.FromResult(true);
     }
 }

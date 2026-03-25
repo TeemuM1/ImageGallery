@@ -14,26 +14,28 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // Tietokanta (SQLite kehityksessä, voidaan vaihtaa SQL Serveriin tuotannossa)
+        // Rekisteröi tietokantayhteys — käyttää SQLiteä oletuksena
+        // "Default" viittaa appsettings.json:n ConnectionStrings:Default-arvoon
         services.AddDbContext<GalleryDbContext>(options =>
             options.UseSqlite(
                 configuration.GetConnectionString("Default") ?? "Data Source=gallery.db"));
 
-        // Repositoriot
+        // Rekisteröi repositoriot — DI antaa näiden toteutukset automaattisesti
+        // kun jokin luokka pyytää IAlbumRepository- tai IPhotoRepository-tyyppiä
         services.AddScoped<IAlbumRepository, AlbumRepository>();
         services.AddScoped<IPhotoRepository, PhotoRepository>();
 
-        // TILAPÄINEN rekisteröinti — sovellus käynnistyy, mutta kuvien lataus ei vielä toimi.
-        // TODO (Vaihe 5): Toteuta LocalStorageService (palauttaa NotImplementedException tähän asti).
-        // TODO (Vaihe 6): Korvaa tämä rivi ehdollisella logiikalla käyttäen StorageOptions-vakioita:
-        //
-        //   var provider = configuration[$"{StorageOptions.SectionName}:Provider"]
-        //       ?? StorageOptions.LocalProvider;
-        //   if (provider == StorageOptions.AzureProvider)
-        //       services.AddScoped<IStorageService, AzureBlobStorageService>();
-        //   else
-        //       services.AddScoped<IStorageService, LocalStorageService>();
-        services.AddScoped<IStorageService, LocalStorageService>();
+        // Valitaan tallennustoteutus konfiguraatioarvon perusteella.
+        // Lokaalissa kehityksessä appsettings.json:ssa on Storage:Provider = "local",
+        // Azuressa App Settingsissä asetetaan Storage:Provider = "azure" (Osa 2).
+        // Näin sama koodi toimii molemmissa ympäristöissä — vain yksi rivi konfiguraatiossa muuttuu.
+        // StorageOptions-vakiot estävät magic stringit — kirjoitusvirhe näkyy käännösaikana
+        var provider = configuration[$"{StorageOptions.SectionName}:Provider"]
+            ?? StorageOptions.LocalProvider;
+        if (provider == StorageOptions.AzureProvider)
+            services.AddScoped<IStorageService, AzureBlobStorageService>(); // Osa 2
+        else
+            services.AddScoped<IStorageService, LocalStorageService>();     // Osa 1 — tämä nyt
 
         return services;
     }
