@@ -8,7 +8,7 @@ Vastaa kysymyksiin omin sanoin. Lyhyet, selkeät vastaukset riittävät — tark
 
 **1.** Selitä omin sanoin: mitä tarkoittaa, että `UploadPhotoUseCase` "ei tiedä" tallennetaanko kuva paikalliselle levylle vai Azureen? Näytä koodirivit, jotka osoittavat tämän.
 
-> Vastauksesi:
+> Vastauksesi: 
 
 ---
 
