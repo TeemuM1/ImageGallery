@@ -62,3 +62,6 @@ StarterCode/GalleryApi/GalleryApi.WebApi/gallery.db-wal
 *.db-shm
 *.db-wal
 wwwroot/uploads/
+out/
+deploy.zip
+zip-preview/

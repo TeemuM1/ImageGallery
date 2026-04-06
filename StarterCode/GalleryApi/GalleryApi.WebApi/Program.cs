@@ -3,21 +3,17 @@ using GalleryApi.Infrastructure;
 using GalleryApi.Infrastructure.Moderation;
 using GalleryApi.Infrastructure.Options;
 using GalleryApi.Infrastructure.Persistence;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ============================================================
-// ONGELMA: API-avain on kovakoodattu suoraan lähdekoodiin!
-//
-// Tämä tarkoittaa:
-//   - Avain näkyy kaikille Git-repositorion käyttäjille
-//   - Avain päätyy versionhallintaan ja säilyy siellä ikuisesti
-//   - Jos repositorio on julkinen, avain on kaikille näkyvillä
-//
-// Tehtäväsi Vaiheessa 3 (README-Part1.md): Korvaa tämä User Secrets -ratkaisulla.
-// Tehtäväsi Vaiheessa 4 (README-Part1.md): Korvaa tämä Options Pattern -ratkaisulla.
-// ============================================================
-
+var keyVaultUrl = builder.Configuration["KeyVault:Url"];
+if (!string.IsNullOrEmpty(keyVaultUrl))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultUrl),
+        new DefaultAzureCredential());
+}
 
 // Konfiguraatio-osiot (Options Pattern)
 builder.Services.Configure<StorageOptions>(
